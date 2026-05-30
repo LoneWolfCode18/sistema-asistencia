@@ -1,0 +1,129 @@
+/* --- COMPONENTE: CONTENIDO Y PANALES DE DATOS --- */
+.main-content {
+    margin-left: 250px; /* Crucial para no solaparse con el sidebar */
+    padding: 40px;
+    width: calc(100% - 250px);
+}
+
+.header-dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #21262d;
+    padding-bottom: 15px;
+}
+
+.header-dashboard h1 {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.status-live {
+    background-color: #21262d;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #8b949e;
+    border: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-live .dot {
+    height: 8px;
+    width: 8px;
+    background-color: #f85149;
+    border-radius: 50%;
+    display: inline-block;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+/* --- TARJETAS INDICADORAS --- */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.card-icon {
+    font-size: 32px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.card-blue .card-icon { background-color: rgba(88, 166, 255, 0.1); color: #58a6ff; }
+.card-green .card-icon { background-color: rgba(56, 139, 253, 0.1); color: #3fb950; }
+.card-orange .card-icon { background-color: rgba(216, 125, 33, 0.1); color: #db6d28; }
+
+.card h3 { font-size: 14px; color: #8b949e; font-weight: 400; }
+.card p { font-size: 28px; font-weight: bold; margin-top: 5px; }
+
+/* --- CONTENEDORES DE TABLAS --- */
+.table-container {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+}
+
+.table-container h2 { font-size: 18px; margin-bottom: 4px; }
+.table-subtitle { font-size: 13px; color: #8b949e; margin-bottom: 20px; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+}
+
+th, td { padding: 14px 16px; border-bottom: 1px solid #21262d; }
+th { color: #8b949e; font-weight: 500; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+tr:hover { background-color: #1f242c; }
+
+.telegram-user {
+    background-color: rgba(88, 166, 255, 0.1);
+    color: #58a6ff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* BADGES ESTILIZADOS */
+.badge-a-tiempo, .badge-tardanza {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+.badge-a-tiempo { background-color: rgba(46, 160, 67, 0.15); color: #56d364; border: 1px solid rgba(46,160,67,0.3); }
+.badge-tardanza { background-color: rgba(248, 81, 73, 0.15); color: #ff7b72; border: 1px solid rgba(248,81,73,0.3); }
+
+/* --- SECCIÓN FEED DEL MURO --- */
+.feed-container { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+.feed-item { background-color: #0d1117; border: 1px solid #21262d; padding: 20px; border-radius: 10px; }
+.feed-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+.feed-time { color: #8b949e; font-size: 12px; }
+.feed-content { color: #c9d1d9; font-style: italic; line-height: 1.5; }

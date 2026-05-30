@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DN-GESTOR | Panel Administrativo</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-details">
+        <i class='bx bx-code-alt icon'></i>
+        <div class="logo_name">AGENCIA DN</div>
+    </div>
+    <p class="system-subtitle">DN-GESTOR</p>
+    <ul class="nav-list">
+        <li>
+            <a href="#" class="active" onclick="cambiarSeccion('asistencias', this)">
+                <i class='bx bx-grid-alt'></i>
+                <span class="links_name">Asistencias</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="cambiarSeccion('tickets', this)">
+                <i class='bx bx-receipt'></i>
+                <span class="links_name">Tickets Soporte</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="cambiarSeccion('muro', this)">
+                <i class='bx bx-conversation'></i>
+                <span class="links_name">Muro de Avances</span>
+            </a>
+        </li>
+        <li class="profile">
+            <div class="profile-details">
+                <div class="name_job">
+                    <div class="name">Coordinador DN</div>
+                    <div class="job">Administrador</div>
+                </div>
+            </div>
+            <i class='bx bx-log-out' id="log_out"></i>
+        </li>
+    </ul>
+</div>
+
+<div class="main-content">
+
+    <div class="header-dashboard">
+        <h1 id="seccion-titulo">Control de Asistencias</h1>
+        <div class="status-live">
+            <span class="dot"></span> MONITORIZACIÓN EN VIVO
+        </div>
+    </div>
+
+    <div id="sec-asistencias" class="dashboard-section">
+        <div class="cards-container">
+            <div class="card card-blue">
+                <i class='bx bx-group card-icon'></i>
+                <div>
+                    <h3>Total Registros</h3>
+                    <p th:text="${totalRegistros}">3</p>
+                </div>
+            </div>
+            <div class="card card-green">
+                <i class='bx bx-check-circle card-icon'></i>
+                <div>
+                    <h3>Ingresos A Tiempo</h3>
+                    <p th:text="${ingresosATiempo}">0</p>
+                </div>
+            </div>
+            <div class="card card-orange">
+                <i class='bx bx-time-five card-icon'></i>
+                <div>
+                    <h3>Tardanzas</h3>
+                    <p th:text="${totalTardanzas}">3</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2>Historial de Registros</h2>
+            <p class="table-subtitle">Lista cronológica de marcaciones de asistencia de los colaboradores</p>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>COLABORADOR</th>
+                    <th>USUARIO TELEGRAM</th>
+                    <th>FECHA DE REGISTRO</th>
+                    <th>HORA DE ENTRADA</th>
+                    <th>ESTADO</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="asistencia : ${asistencias}">
+                    <td th:text="${asistencia.id}">1</td>
+                    <td th:text="${asistencia.usuario.nombre}">Shady Developer</td>
+                    <td><span class="telegram-user"><i class='bx bxl-telegram'></i> @<span th:text="${asistencia.usuario.telegramUser}">shady_dev</span></span></td>
+                    <td th:text="${#temporals.format(asistencia.fecha, 'dd/MM/yyyy')}">27/05/2026</td>
+                    <td th:text="${#temporals.format(asistencia.horaEntrada, 'hh:mm a')}">01:30 a. m.</td>
+                    <td>
+                                <span th:classappend="${asistencia.estadoAsistencia == 'A TIEMPO' ? 'badge-a-tiempo' : 'badge-tardanza'}"
+                                      th:text="${asistencia.estadoAsistencia}">TARDANZA</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="sec-tickets" class="dashboard-section section-hidden">
+        <div class="table-container">
+            <h2>Incidentes de Soporte Asignados</h2>
+            <p class="table-subtitle">Monitoreo de tareas y criticidad de los desarrolladores remotos</p>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID TICKET</th>
+                    <th>DESARROLLADOR</th>
+                    <th>DESCRIPCIÓN DEL INCIDENTE</th>
+                    <th>CRITICIDAD</th>
+                    <th>ESTADO TAREA</th>
+                </tr>
+                </thead>
+                <tbody>
+                 <tr th:each="ticket : ${tickets}">
+                    <td th:text="'#' + ${ticket.id}">#1042</td>
+                    <td th:text="${ticket.usuario.nombre}">Shady Dev</td>
+                    <td th:text="${ticket.descripcion}">Descripción del problema</td>
+                    <td>
+                         <span th:classappend="${ticket.criticidad == 'CRÍTICO' ? 'badge-tardanza' : 'telegram-user'}"
+                         th:text="${ticket.criticidad}">CRÍTICO</span>
+                    </td>
+                    <td><span class="telegram-user" th:text="${ticket.estado}">ASIGNADO</span></td>
+                </tr>
+                   <tr th:if="${#lists.isEmpty(tickets)}">
+                    <td colspan="5" style="text-align: center; color: #8b949e;">No hay incidentes de soporte pendientes hoy.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="sec-muro" class="dashboard-section section-hidden">
+        <div class="table-container">
+            <h2>Muro de Actividades Diarias</h2>
+            <p class="table-subtitle">Feed de bitácoras en tiempo real contra el ocio en el trabajo remoto</p>
+            <div class="feed-container">
+                <div class="feed-item" th:each="publicacion : ${publicacionesMuro}">
+                    <div class="feed-header">
+                        <strong th:text="${publicacion.usuario.nombre}">Shady Dev</strong>
+                        <span class="feed-time" th:text="${#temporals.format(publicacion.fechaCreacion, 'dd/MM/yyyy hh:mm a')}">Hoy 10:45 AM</span>
+                    </div>
+                    <p class="feed-content" th:text="'&quot;' + ${publicacion.contenido} + '&quot;'">"Contenido del avance diario."</p>
+                </div>
+                <div th:if="${#lists.isEmpty(publicacionesMuro)}" style="text-align: center; color: #8b949e; padding: 20px;">
+                    El muro está limpio. Los desarrolladores remotos aún no han reportado actividades hoy.
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function cambiarSeccion(seccion, elemento) {
+        // Ocultar todas las secciones
+        document.querySelectorAll('.dashboard-section').forEach(sec => {
+            sec.classList.add('section-hidden');
+        });
+        // Quitar clase activa de los botones del menú
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        // Mostrar sección seleccionada
+        document.getElementById('sec-' + seccion).classList.remove('section-hidden');
+        elemento.classList.add('active');
+
+        // Cambiar título dinámicamente
+        const titulos = {
+            'asistencias': 'Control de Asistencias',
+            'tickets': 'Gestión de Incidentes (Tickets)',
+            'muro': 'Bitácora / Muro de Avances'
+        };
+        document.getElementById('seccion-titulo').innerText = titulos[seccion];
+    }
+</script>
+</body>
+</html>

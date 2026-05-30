@@ -1,0 +1,30 @@
+/* --- CONFIGURACIÓN BASE DEL SISTEMA --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0d1117;
+    color: #e6edf3;
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Control de visibilidad para el menú lateral dinámico */
+.dashboard-section {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.section-hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

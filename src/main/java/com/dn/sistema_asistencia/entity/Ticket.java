@@ -1,0 +1,35 @@
+package com.dn.sistema_asistencia.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "tickets")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Ticket {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
+
+    @Column(name = "estado_ticket")
+    private String estadoTicket;
+
+    @Column(name = "url_evidencia")
+    private String urlEvidencia;
+
+    @Column(name = "fecha_asignacion")
+    private LocalDateTime fechaAsignacion;
+}

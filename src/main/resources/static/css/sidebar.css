@@ -1,0 +1,87 @@
+/* --- COMPONENTE: SIDEBAR PREMIUM --- */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #161b22;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #30363d;
+    z-index: 100;
+}
+
+.sidebar .logo-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #58a6ff;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.sidebar .system-subtitle {
+    font-size: 11px;
+    color: #8b949e;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    padding-left: 5px;
+}
+
+.sidebar .nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar .nav-list a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #c9d1d9;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-list a:hover, .sidebar .nav-list a.active {
+    background-color: #21262d;
+    color: #58a6ff;
+}
+
+.sidebar .profile {
+    margin-top: auto;
+    background-color: #0d1117;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #21262d;
+}
+
+.sidebar .profile .name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #e6edf3;
+}
+
+.sidebar .profile .job {
+    font-size: 11px;
+    color: #8b949e;
+}
+
+.sidebar .profile #log_out {
+    color: #f85149;
+    cursor: pointer;
+    font-size: 20px;
+    transition: transform 0.2s;
+}
+
+.sidebar .profile #log_out:hover {
+    transform: scale(1.1);
+}

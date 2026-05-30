@@ -1,0 +1,12 @@
+package com.dn.sistema_asistencia.repository;
+
+import com.dn.sistema_asistencia.entity.Asistencia;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.time.LocalDate;
+import java.util.Optional;
+
+@Repository
+public interface AsistenciaRepository extends JpaRepository<Asistencia, Long> {
+    Optional<Asistencia> findByUsuarioIdAndFecha(Long usuarioId, LocalDate fecha);
+}
