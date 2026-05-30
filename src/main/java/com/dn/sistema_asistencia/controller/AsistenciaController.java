@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @RestController // 🎯 Devuelve HTML directo al navegador del celular
 public class AsistenciaController {
@@ -34,11 +33,19 @@ public class AsistenciaController {
     @GetMapping(value = "/api/asistencia/registrar", produces = MediaType.TEXT_HTML_VALUE)
     public String registrarAsistencia(@RequestParam String telegramUser) {
 
-        // 1. Buscamos al usuario en la BD por su cuenta de Telegram
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByTelegramUser(telegramUser);
+        Usuario usuario = null;
 
-        if (usuarioOpt.isEmpty()) {
-            // Retorno si el usuario no es encontrado (Como la prueba ShadyTest)
+        // 1. Buscamos al usuario de manera segura controlando respuestas nulas de la Query Nativa
+        try {
+            if (usuarioRepository.findByTelegramUser(telegramUser) != null) {
+                usuario = usuarioRepository.findByTelegramUser(telegramUser).orElse(null);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al consultar el usuario en Supabase: " + e.getMessage());
+        }
+
+        // 🔥 FILTRO ABSOLUTO: Si el usuario no existe o la BD devolvió null, mostramos la pantalla roja ordenada
+        if (usuario == null) {
             return "<div style='text-align: center; font-family: sans-serif; padding: 50px;'>" +
                     "<h1 style='color: #d32f2f;'>❌ Usuario No Encontrado</h1>" +
                     "<p style='font-size: 18px;'>El usuario de Telegram <strong>@" + telegramUser + "</strong> no está registrado en la base de datos.</p>" +
@@ -47,7 +54,7 @@ public class AsistenciaController {
                     "</div>";
         }
 
-        Usuario usuario = usuarioOpt.get();
+        // 2. Si llegó aquí, el objeto 'usuario' es completamente real y seguro de usar
         LocalDate hoy = LocalDate.now();
         LocalTime horaActual = LocalTime.now();
 
@@ -55,7 +62,7 @@ public class AsistenciaController {
         LocalTime horaLimite = LocalTime.of(9, 15);
         String estadoAsistencia = !horaActual.isAfter(horaLimite) ? "A TIEMPO" : "TARDANZA";
 
-        // 2. Construimos el objeto de asistencia con tu patrón Builder perfecto
+        // 3. Construimos el objeto de asistencia con tu patrón Builder perfecto
         Asistencia nuevaAsistencia = Asistencia.builder()
                 .usuario(usuario)
                 .fecha(hoy)
@@ -63,11 +70,11 @@ public class AsistenciaController {
                 .estadoAsistencia(estadoAsistencia)
                 .build();
 
-        // 3. Intento seguro de guardado en la base de datos
+        // 4. Intento seguro de guardado en la base de datos controlando el UniqueConstraint
         try {
             asistenciaRepository.save(nuevaAsistencia);
         } catch (Exception e) {
-            // 🔥 CAPTURA: Evita el Error 500 si viola el UniqueConstraint de Supabase (usuario_id + fecha)
+            // Evita el Error 500 si viola el UniqueConstraint de Supabase (usuario_id + fecha)
             return "<div style='text-align: center; font-family: sans-serif; padding: 50px;'>" +
                     "<h1 style='color: #f57c00;'>⚠️ Ya Registrado</h1>" +
                     "<p style='font-size: 18px;'>👋 Hola, <strong>" + usuario.getNombre() + "</strong>.</p>" +
@@ -80,7 +87,7 @@ public class AsistenciaController {
         // Formateamos la hora para la vista de éxito y la notificación
         String horaFormateada = horaActual.format(DateTimeFormatter.ofPattern("hh:mm a"));
 
-        // 4. Intento seguro de notificación por Telegram
+        // 5. Intento seguro de notificación por Telegram
         try {
             String mensajeAlert = "🔔 ¡Hola " + usuario.getNombre() + "! Tu ingreso (" + estadoAsistencia + ") ha sido registrado con éxito a las " + horaFormateada + ".";
             telegramBotService.enviarNotificacionAsistencia(usuario.getTelegramUser(), mensajeAlert);
@@ -88,7 +95,7 @@ public class AsistenciaController {
             System.err.println("Aviso: No se pudo enviar el mensaje de Telegram: " + e.getMessage());
         }
 
-        // 5. Retornamos la interfaz HTML verde de éxito rotundo
+        // 6. Retornamos la interfaz HTML verde de éxito rotundo
         return "<div style='text-align: center; font-family: sans-serif; padding: 50px;'>" +
                 "<h1 style='color: #2e7d32;'>✔️ ¡Asistencia Registrada!</h1>" +
                 "<p style='font-size: 18px;'>👋 Hola, <strong>" + usuario.getNombre() + "</strong>.</p>" +
