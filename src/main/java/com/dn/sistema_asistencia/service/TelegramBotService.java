@@ -3,7 +3,7 @@ package com.dn.sistema_asistencia.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage; // <-- Importado para las alertas de texto
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,23 +14,32 @@ import java.io.ByteArrayInputStream;
 @Service
 public class TelegramBotService extends TelegramLongPollingBot {
 
+    // 1. Inyectamos la URL dinámica de producción/local desde el application.properties
+    @Value("${app.base-url}")
+    private String baseUrl;
+
+    // 2. Inyectamos el nombre y token dinámicos para no dejar datos sensibles expuestos en GitHub
+    @Value("${telegram.bot.username}")
+    private String botUsername;
+
+    @Value("${telegram.bot.token}")
+    private String botToken;
+
     private final QrGeneratorService qrGeneratorService;
 
-    // Inyectamos tu servicio de QR genérico
+    // Constructor único para inyectar dependencias
     public TelegramBotService(QrGeneratorService qrGeneratorService) {
         this.qrGeneratorService = qrGeneratorService;
     }
 
     @Override
     public String getBotUsername() {
-        // Aquí pones el nombre de tu bot de Telegram
-        return "dn_gestor_asistencia_bot";
+        return this.botUsername;
     }
 
     @Override
     public String getBotToken() {
-        // Token entregado por BotFather
-        return "8156981786:AAFM4vLJH_J3bbggt9KtN4V1fKzVPrqcwHM";
+        return this.botToken;
     }
 
     @Override
@@ -51,8 +60,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
             // Si escribe /asistencia o /qr
             if (messageText.equalsIgnoreCase("/asistencia") || messageText.equalsIgnoreCase("/qr")) {
                 try {
-                    // 1. Armamos la URL dinámica con tu IP de la laptop
-                    String urlConParametro = "http://10.53.111.211:8080/api/asistencia/registrar?telegramUser=" + telegramUser;
+                    // 🔥 CORRECCIÓN: Armamos la URL usando el dominio dinámico (Render o Local)
+                    String urlConParametro = baseUrl + "/api/asistencia/registrar?telegramUser=" + telegramUser;
 
                     // 2. Llamamos a tu servicio para que genere los bytes de la imagen QR
                     byte[] qrBytes = qrGeneratorService.generateQrCodeImage(urlConParametro, 300, 300);
@@ -67,6 +76,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                     execute(sendPhoto);
 
                 } catch (Exception e) {
+                    System.err.println("Error al generar o enviar el código QR: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
