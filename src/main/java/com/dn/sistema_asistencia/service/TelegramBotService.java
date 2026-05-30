@@ -88,13 +88,22 @@ public class TelegramBotService extends TelegramLongPollingBot {
      * @param chatUserId El identificador de Telegram (puede ser el username o chatId si lo manejas numérico)
      * @param mensaje El contenido de la alerta de asistencia
      */
+    /**
+     * Envía una notificación de texto automática al empleado cuando el backend registra su asistencia.
+     */
     public void enviarNotificacionAsistencia(String chatUserId, String mensaje) {
+        // Hacemos una validación rápida: si no es un número, no intentamos enviarlo para evitar que rompa el backend
+        if (chatUserId == null || !chatUserId.matches("\\d+")) {
+            System.err.println("⚠️ No se envió la notificación: '" + chatUserId + "' no es un ChatId numérico válido de Telegram.");
+            return; // Termina el método de forma segura sin lanzar errores al controlador
+        }
+
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatUserId);
         sendMessage.setText(mensaje);
 
         try {
-            execute(sendMessage); // Envía el mensaje de texto directo al celular del usuario
+            execute(sendMessage);
         } catch (TelegramApiException e) {
             System.err.println("Error al enviar la notificación de asistencia por Telegram: " + e.getMessage());
             e.printStackTrace();
