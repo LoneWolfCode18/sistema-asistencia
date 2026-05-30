@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: sistema-asistencia
+    runtime: java
+    buildCommand: ./mvnw clean install -DskipTests
+    startCommand: java -jar target/sistema-asistencia-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: DB_URL
+        sync: true
+      - key: DB_USER
+        sync: true
+      - key: DB_PASSWORD
+        sync: true
+      - key: TELEGRAM_BOT_NAME
+        sync: true
+      - key: TELEGRAM_BOT_TOKEN
+        sync: true
