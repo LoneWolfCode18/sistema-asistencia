@@ -3,28 +3,22 @@ package com.dn.sistema_asistencia.controller;
 import com.dn.sistema_asistencia.entity.BitacoraMuro;
 import com.dn.sistema_asistencia.repository.BitacoraMuroRepository;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/muro")
+@CrossOrigin(origins = "*") // 🔥 Con esto, tu VSC podrá pedirle datos sin problemas
 public class MuroController {
 
-    private final BitacoraMuroRepository bitacoraMuroRepository;
+    private final BitacoraMuroRepository muroRepository;
 
-    public MuroController(BitacoraMuroRepository bitacoraMuroRepository) {
-        this.bitacoraMuroRepository = bitacoraMuroRepository;
+    public MuroController(BitacoraMuroRepository muroRepository) {
+        this.muroRepository = muroRepository;
     }
 
-    // Para ver todas las actividades publicadas por los devs remotos
-    @GetMapping("/publicaciones")
-    public List<BitacoraMuro> obtenerFeedMuro() {
-        return bitacoraMuroRepository.findAll();
-    }
-
-    // Para que un dev publique lo que está haciendo desde su casa
-    @PostMapping("/publicar")
-    public BitacoraMuro publicarAvance(@RequestBody BitacoraMuro nuevaBitacora) {
-        return bitacoraMuroRepository.save(nuevaBitacora);
+    // El Dashboard en VSC llamará a esto para listar todos los aprendizajes
+    @GetMapping("/listar")
+    public List<BitacoraMuro> listarMuro() {
+        return muroRepository.findAll();
     }
 }

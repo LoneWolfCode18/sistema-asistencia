@@ -5,16 +5,20 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // <--- Importa esto
+
 @Entity
 @Table(name = "asistencias", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"usuario_id", "fecha"})
+        @UniqueConstraint(columnNames = {"usuario_id", "fecha"})
 })
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // <--- Agrégalo aquí
 public class Asistencia {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
