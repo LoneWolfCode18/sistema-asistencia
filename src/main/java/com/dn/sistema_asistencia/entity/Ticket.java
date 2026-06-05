@@ -35,5 +35,5 @@ public class Ticket {
     private String urlEvidencia;
 
     @Column(name = "fecha_asignacion")
-    private LocalDateTime fechaAsignacion;
+    private java.time.OffsetDateTime fechaAsignacion;
 }

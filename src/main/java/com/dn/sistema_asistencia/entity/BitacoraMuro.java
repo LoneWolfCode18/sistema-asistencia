@@ -22,10 +22,11 @@ public class BitacoraMuro {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
-    // 🔥 Clave para evitar el Error 500 al transformar a JSON en el controlador del Muro
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo"})
+    // 🔥 Agregamos "bitacoras" (o el nombre de la lista inversa en Usuario) para evitar recursividad infinita
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo", "bitacoras"})
     private Usuario usuario;
 
+    // Se mantiene igual, mapea directo con la columna "fecha" (tipo date en Postgres)
     private LocalDate fecha;
 
     @Column(name = "hora_registro")

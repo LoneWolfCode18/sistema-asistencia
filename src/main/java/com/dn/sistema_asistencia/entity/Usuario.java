@@ -30,5 +30,5 @@ public class Usuario {
     private String estado = "ACTIVO";
 
     @Column(name = "fecha_creacion")
-    private LocalDateTime fechaCreacion;
+    private java.time.OffsetDateTime fechaCreacion;
 }
