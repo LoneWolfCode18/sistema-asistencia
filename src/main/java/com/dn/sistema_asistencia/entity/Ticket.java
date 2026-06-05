@@ -22,7 +22,7 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     // 🔥 Clave para evitar el Error 500 al listar los Tickets
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo", "tickets", "asistencias", "bitacoras"})
     private Usuario usuario;
 
     @Column(columnDefinition = "TEXT")

@@ -25,7 +25,7 @@ public class Asistencia {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     // 🔥 Agregado aquí también para que el dashboard pinte la asistencia sin romperse
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo", "asistencias", "tickets", "bitacoras"})
     private Usuario usuario;
 
     private LocalDate fecha;
@@ -38,4 +38,6 @@ public class Asistencia {
 
     @Column(name = "estado_asistencia")
     private String estadoAsistencia;
+
+
 }
