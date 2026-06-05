@@ -3,8 +3,7 @@ package com.dn.sistema_asistencia.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // <--- Importa esto
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "usuarios")
@@ -13,9 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // <--- Importa es
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // <--- Agrégalo aquí
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

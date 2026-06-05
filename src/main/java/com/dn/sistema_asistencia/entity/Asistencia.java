@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // <--- Importa esto
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "asistencias", uniqueConstraints = {
@@ -16,9 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // <--- Importa es
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // <--- Agrégalo aquí
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Asistencia {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +24,8 @@ public class Asistencia {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
+    // 🔥 Agregado aquí también para que el dashboard pinte la asistencia sin romperse
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fechaCreacion", "correo"})
     private Usuario usuario;
 
     private LocalDate fecha;
